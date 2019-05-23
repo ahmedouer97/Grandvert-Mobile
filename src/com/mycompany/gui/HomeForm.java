@@ -83,6 +83,15 @@ public class HomeForm {
         Label labelEvent = new Label(IconEvent);
         Label labelPlante = new Label(IconPlante);
         Label labelJardin = new Label(IconJardin);
+        
+        labelJardin.addPointerPressedListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+               Jardin h = new Jardin(sm.getJardinId());
+                h.getF().show();
+                
+            }
+        });
 
         hi = new Form("Dashboard", new GridLayout(3, 2));
         hi.add(labelForum).
@@ -103,7 +112,11 @@ public class HomeForm {
             f.getHi();
         }); 
         tb.addMaterialCommandToSideMenu("Site web", FontImage.MATERIAL_WEB, e -> {});
-        tb.addMaterialCommandToSideMenu("Déconnecter", FontImage.MATERIAL_LOCK, e -> {});
+        tb.addMaterialCommandToSideMenu("Déconnecter", FontImage.MATERIAL_LOCK, e -> {
+            sm.setUser(null);
+            Login l = new Login();
+            l.getHi().show();
+        });
         tb.addMaterialCommandToSideMenu("à propos", FontImage.MATERIAL_INFO, e -> {});
         hi.show();
     }

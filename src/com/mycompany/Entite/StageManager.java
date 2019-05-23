@@ -18,6 +18,7 @@ public class StageManager {
     
     private static StageManager stager = new StageManager();
     private User user;
+    private int jardinId;
     
     private StageManager() {
     }
@@ -40,6 +41,14 @@ public class StageManager {
     
     public User getUser(){
         return this.user;
+    }
+    
+    public void setJardinId(int jardinId){
+        this.jardinId=jardinId;
+    }
+    
+    public int getJardinId(){
+        return this.jardinId;
     }
     
     

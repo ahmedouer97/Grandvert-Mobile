@@ -12,6 +12,7 @@ import com.codename1.ui.TextField;
 import com.codename1.ui.layouts.BoxLayout;
 import com.mycompany.Entite.StageManager;
 import com.mycompany.Entite.User;
+import com.mycompany.Service.JardinService;
 import com.mycompany.Service.ServiceUser;
 
 /**
@@ -25,6 +26,7 @@ public class Login {
     TextField tetat;
     Button btnajout,btnaff;
     ServiceUser userService = new ServiceUser();
+    JardinService jardinService = new JardinService();
 
     public Login() {
                                 
@@ -42,6 +44,9 @@ public class Login {
             if (id!=0){
                 User user = userService.getById(id);
                 sm.setUser(user);
+                sm.setJardinId(jardinService.getJardin(id).getId());
+                HomeForm a=new HomeForm();
+                a.getHi().show();
             }
         });
         
