@@ -25,10 +25,30 @@ import java.util.Map;
  */
 public class ServiceUser {
 
+    String str = "";
+    
+    public int checkPassword(String username, String password){
+        ConnectionRequest con = new ConnectionRequest();// création d'une nouvelle demande de connexion
+        
+        String Url = "http://localhost/GrandVert-Web/web/app_dev.php/api/checkpassword?username="+username+"&password="+password;// création de l'URL
+        con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
+        
+        con.addResponseListener((e) -> {
+            str = new String(con.getResponseData());//Récupération de la réponse du serveur
+            System.out.println("checkpassword Response:  "+str);//Affichage de la réponse serveur sur la console
+
+        });
+        NetworkManager.getInstance().addToQueueAndWait(con);
+        if (str.isEmpty() || str.length()>3){
+            return 0;
+        }
+        return Integer.parseInt(str);
+    }
+
     public void ajoutUser(User s) {
         ConnectionRequest con = new ConnectionRequest();// création d'une nouvelle demande de connexion
         //String Url = "http://localhost/symfony-api/web/app_dev.php/api/user/new?name="+ta.getNom()+"&status="+ta.getEtat();// création de l'URL
-        String Url = "http://localhost/symfony-api/web/app_dev.php/api/user/new?name=";// création de l'URL
+        String Url = "http://localhost/GrandVert-Web/web/app_dev.php/api/registerApi=";// création de l'URL
         con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
 
         con.addResponseListener((e) -> {
@@ -66,6 +86,8 @@ public class ServiceUser {
         });
         NetworkManager.getInstance().addToQueueAndWait(con);// Ajout de notre demande de connexion à la file d'attente du NetworkManager
     }    
+    
+    ArrayList<User> listUsers = new ArrayList<>();
 
     public ArrayList<User> parseListTaskJson(String json) {
 
@@ -101,10 +123,12 @@ public class ServiceUser {
                 User e = new User();
 
                 float id = Float.parseFloat(obj.get("id").toString());
-
+                
                 e.setId((int) id);
+                e.setEmail(obj.get("email").toString());
                 e.setNom(obj.get("nom").toString());
                 e.setPrenom(obj.get("prenom").toString());
+                e.setAdresse(obj.get("adresse").toString());
                 e.setAvatar(obj.get("avatar").toString());
                 
                 listUsers.add(e);
@@ -112,7 +136,7 @@ public class ServiceUser {
             }
 
         } catch (IOException ex) {
-        }
+        } 
         
         /*
             A ce niveau on a pu récupérer une liste des tâches à partir
@@ -144,7 +168,7 @@ public class ServiceUser {
     
     public User getById(int id){       
         ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/GrandVert/web/app_dev.php/forum/api/user/return/?id="+id);  
+        con.setUrl("http://localhost/GrandVert-Web/web/app_dev.php/api/getuser?id="+id);  
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -154,7 +178,7 @@ public class ServiceUser {
         });
         NetworkManager.getInstance().addToQueueAndWait(con);
         return listUser.get(0);
-    }    
+    }      
    
 
 }
